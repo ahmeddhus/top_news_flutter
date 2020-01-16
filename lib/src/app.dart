@@ -9,10 +9,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return CommentsProvider(
       child: StoriesProvider(
-        child: MaterialApp(
-            title: 'News!',
-            onGenerateRoute: routes
-        ),
+        child: MaterialApp(title: 'News!', onGenerateRoute: routes),
       ),
     );
   }
@@ -21,21 +18,22 @@ class App extends StatelessWidget {
     if (settings.name == '/') {
       return MaterialPageRoute(
         builder: (context) {
+          final storiesBloc = StoriesProvider.of(context);
+          storiesBloc.fetchTopIds();
           return NewsList();
         },
       );
     } else {
-      return MaterialPageRoute(
-          builder: (context) {
-            final commentsBloc = CommentsProvider.of(context);
-            final itemId = int.parse(settings.name.replaceFirst('/', ''));
+      return MaterialPageRoute(builder: (context) {
+        final commentsBloc = CommentsProvider.of(context);
+        final itemId = int.parse(settings.name.replaceFirst('/', ''));
 
-            commentsBloc.fetchItemWithComments(itemId);
+        commentsBloc.fetchItemWithComments(itemId);
 
-            return NewsDetails(
-                itemId: itemId,
-            );
-          });
+        return NewsDetails(
+          itemId: itemId,
+        );
+      });
     }
   }
 }
